@@ -115,6 +115,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Cell.h" />
+    <ClInclude Include="maze.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="game.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="mazes.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
