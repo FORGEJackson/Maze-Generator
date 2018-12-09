@@ -1,3 +1,5 @@
+// Maze Game.cpp : This file contains the 'main' function. Program execution begins and ends there.
+#include "pch.h"
 #include <cstdlib>
 #include <iostream>
 #include <vector>
@@ -5,11 +7,10 @@
 #include <Windows.h>
 #include <time.h>
 #include <string>
+#include <cmath>
 
 #include "maze.h"
-#include "Cell.h"
 #include "mazesquare.h"
-
 using namespace std;
 
 
@@ -24,18 +25,73 @@ bool checkUserInput(vector<int> keys, maze currentMaze);
 
 
 int main() {
-	maze testMaze;
-	testMaze.genMaze();
+	maze currentMaze;
+	currentMaze.genMaze();
+	
+	const int windowSize = 600;
+	sf::RenderWindow window(sf::VideoMode(windowSize, windowSize), "SFML works!");
+	
+	
+	vector<Square> squaresVector(currentMaze.dimensions);
+	
+	
 
-	for (int i = 0; i < testMaze.dimensions; i++) {
-		cout << testMaze.getSquareValue(i) << " ";
-		if (i % 11 == 10) {
-			cout << endl;
+	while (window.isOpen()) // Event Loop
+	{
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window.close();
 		}
-	}
+		
 
-	int test;
-	cin >> test;
+		// Create vector of squares that matches dimensions of maze
+		
+		
+		int sideLength = sqrt(currentMaze.dimensions);
+		for (int i = 0; i < sideLength; i++) {
+			for (int j = 0; j < sideLength; j++) {
+
+
+
+				sf::Color tempColor;
+				switch (currentMaze.getSquareValue(i+j * sideLength)) {
+				case 0:
+					tempColor = sf::Color::Black;
+					break;
+				case 1:
+					tempColor = sf::Color::White;
+					break;
+				case 2:
+					tempColor = sf::Color::Green;
+					break;
+				case 3:
+					tempColor = sf::Color::Red;
+					break;
+				}
+
+				squaresVector[i + j*sideLength] = Square(windowSize / sideLength - 4, (windowSize / sideLength) * i + 2, (windowSize / sideLength) * j + 2, tempColor);
+			}
+		} 
+		
+		
+		window.clear();
+		// Draw backgroud square
+		sf::Color grey(75, 75, 75);
+		Square backgroundSquare = Square(windowSize, 0, 0, grey);
+		window.draw(backgroundSquare.getTheSquare());
+
+		// Draw Maze squares
+		for (int i = 0; i < currentMaze.dimensions; i++) {
+			window.draw(squaresVector[i].getTheSquare());
+		}
+		
+		
+		
+		window.display();
+	}
+	
 }
 
 // Function Definitions
@@ -134,6 +190,7 @@ bool checkUserInput(vector<int> keys, maze currentMaze) {
 
 * Get user input
 	- Add all inputs to vector	*DONE*
+	- Add undo on inputs????
 	- Add timer to interface
 * Validate user input agaisnt maze for level
 	- Parse through maze to see if successful *DONE*
@@ -141,3 +198,4 @@ bool checkUserInput(vector<int> keys, maze currentMaze) {
 
 
 */
+
