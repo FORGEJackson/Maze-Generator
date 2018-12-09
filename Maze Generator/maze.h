@@ -227,6 +227,35 @@ public:
 			cout << endl;
 			*/
 		}
+
+		convert();
+	}
+
+	void  convert() {
+		grid[1][1].start = true;
+		grid[10][10].finish = true;
+
+		dimensions = 100;
+
+
+		for (int j = 0; j < WIDTH - 1; j++) {
+			for (int i = 0; i < WIDTH - 1; i++) {
+				if (grid[i][j].wall) {
+					layout.push_back(0);
+				}
+				else if (grid[i][j].start) {
+					layout.push_back(2);
+					start = (j * WIDTH) + i;
+				}
+				else if (grid[i][j].finish) {
+					layout.push_back(3);
+					finish = (j * WIDTH) + i;
+				}
+				else {
+					layout.push_back(1);
+				}
+			}
+		}
 	}
 };
 

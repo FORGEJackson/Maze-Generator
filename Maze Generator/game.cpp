@@ -4,10 +4,11 @@
 #include <SFML/Graphics.hpp>
 #include <Windows.h>
 #include <time.h>
+#include <string>
 
 #include "maze.h"
 #include "Cell.h"
-
+#include "mazesquare.h"
 
 using namespace std;
 
@@ -23,25 +24,18 @@ bool checkUserInput(vector<int> keys, maze currentMaze);
 
 
 int main() {
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-	sf::CircleShape shape(100.f);
-	shape.setFillColor(sf::Color::Green);
+	maze testMaze;
+	testMaze.genMaze();
 
-	while (window.isOpen())
-	{
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window.close();
+	for (int i = 0; i < testMaze.dimensions; i++) {
+		cout << testMaze.getSquareValue(i) << " ";
+		if (i % 10 == 9) {
+			cout << endl;
 		}
-
-		window.clear();
-		window.draw(shape);
-		window.display();
 	}
 
-	return 0;
+	int test;
+	cin >> test;
 }
 
 // Function Definitions

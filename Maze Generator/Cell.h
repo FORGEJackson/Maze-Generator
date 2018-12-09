@@ -5,4 +5,6 @@ public:
 	bool wall;
 	int xPos;
 	int yPos;
+	bool start;
+	bool finish;
 };

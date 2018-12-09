@@ -122,6 +122,7 @@
   <ItemGroup>
     <ClInclude Include="Cell.h" />
     <ClInclude Include="maze.h" />
+    <ClInclude Include="mazesquare.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game.cpp" />
