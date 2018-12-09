@@ -31,6 +31,8 @@ int main() {
 	vector<int> keys;
 	bool failMaze = false;
 
+	int curWidth = 15;
+
 	const int windowSize = 600;
 	sf::RenderWindow window(sf::VideoMode(windowSize, windowSize), "Maze Game");
 	
@@ -48,7 +50,9 @@ int main() {
 			}
 			// Generate maze for round
 			maze currentMaze;
+			currentMaze.width = curWidth;
 			currentMaze.genMaze();
+			cout << currentMaze.width << endl;
 
 			// Create vector of squares that matches dimensions of maze
 
@@ -108,7 +112,7 @@ int main() {
 			}
 
 
-
+			curWidth += 2;
 		} // End Event loop
 
 

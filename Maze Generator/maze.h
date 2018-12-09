@@ -9,7 +9,7 @@
 
 using namespace std;
 
-const int WIDTH = 7;
+//const int WIDTH = 11;
 
 class maze {
 private:
@@ -66,27 +66,14 @@ public:
 	} // End test constructor */
 
 	maze() {	
-		width = WIDTH;
+		//width = WIDTH;
+		width = 11;
 
-		grid.resize(width);
-
-		for (int i = 0; i < width; i++) {
-			grid[i].resize(width);
+		if (width % 2 == 0) {
+			width++;
 		}
 
-		for (int j = 0; j < width; j++) {		//Generate each cell as a wall
-			for (int i = 0; i < width; i++) {
-				grid[i][j].wall = true;
-				grid[i][j].xPos = i;
-				grid[i][j].yPos = j;
-			}
-		}
-
-		for (int j = 1; j < width; j += 2) {	//Generate a grid of valid spots
-			for (int i = 1; i < width; i += 2) {
-				grid[i][j].wall = false;
-			}
-		}
+		
 	}
 
 	// Read maze from file as constructor
@@ -139,6 +126,7 @@ public:
 	void printMaze() {
 		for (int j = 0; j < width; j++) {
 			for (int i = 0; i < width; i++) {
+				//cout << i << " " << j << " " << width << " " << grid.size() << " " << grid[i].size() << endl; //Display debug info
 				if (grid[i][j].wall) {
 					cout << (char)219;
 				}
@@ -162,6 +150,26 @@ public:
 			2. Remove the current wall from the stack	-
 		*/
 
+		grid.resize(width);
+
+		for (int i = 0; i < width; i++) {
+			grid[i].resize(width);
+		}
+
+		for (int j = 0; j < width; j++) {		//Generate each cell as a wall
+			for (int i = 0; i < width; i++) {
+				grid[i][j].wall = true;
+				grid[i][j].xPos = i;
+				grid[i][j].yPos = j;
+			}
+		}
+
+		for (int j = 1; j < width; j += 2) {	//Generate a grid of valid spots
+			for (int i = 1; i < width; i += 2) {
+				grid[i][j].wall = false;
+			}
+		}
+
 		int xPos = ((rand() % (width / 2)) * 2) + 1;
 		int yPos = ((rand() % (width / 2)) * 2) + 1;
 
@@ -182,6 +190,9 @@ public:
 
 			if (current.xPos != 0 && current.xPos != width - 1 && current.yPos != 0 && current.yPos != width - 1) {
 				if (grid[current.xPos][current.yPos - 1].wall) { //Tests if wall is vertical
+					//cout << grid.size() << " " << grid[current.xPos].size() << endl << current.xPos << " " << current.yPos << endl;	//Display debug info
+					//printMaze();
+
 					if (!grid[current.xPos - 1][current.yPos].visited || !grid[current.xPos + 1][current.yPos].visited) {
 						if (!grid[current.xPos - 1][current.yPos].visited) {
 							walls.push_back(grid[current.xPos - 2][current.yPos]);
@@ -202,6 +213,9 @@ public:
 					}
 				}
 				else {
+					//cout << grid.size() << " " << grid[current.xPos].size() << endl << current.xPos << " " << current.yPos << endl;	//Display debug info
+					//printMaze();
+
 					if (!grid[current.xPos][current.yPos - 1].visited || !grid[current.xPos][current.yPos + 1].visited) {
 						if (!grid[current.xPos][current.yPos - 1].visited) {
 							walls.push_back(grid[current.xPos - 1][current.yPos - 1]);
