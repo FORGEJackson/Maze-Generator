@@ -1,5 +1,5 @@
 // Maze Game.cpp : This file contains the 'main' function. Program execution begins and ends there.
-#include "pch.h"
+//#include "pch.h"
 #include <cstdlib>
 #include <iostream>
 #include <vector>
@@ -25,11 +25,12 @@ bool checkUserInput(vector<int> keys, maze currentMaze);
 
 
 int main() {
+	srand(time(NULL));
 	maze currentMaze;
 	currentMaze.genMaze();
 	
 	const int windowSize = 600;
-	sf::RenderWindow window(sf::VideoMode(windowSize, windowSize), "SFML works!");
+	sf::RenderWindow window(sf::VideoMode(windowSize, windowSize), "Maze");
 	
 	
 	vector<Square> squaresVector(currentMaze.dimensions);

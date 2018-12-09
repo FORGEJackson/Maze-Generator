@@ -9,7 +9,7 @@
 
 using namespace std;
 
-const int WIDTH = 11;
+const int WIDTH = 21;
 
 class maze {
 private:
@@ -233,9 +233,9 @@ public:
 
 	void  convert() {
 		grid[1][1].start = true;
-		grid[9][9].finish = true;
+		grid[WIDTH - 2][WIDTH - 2].finish = true;
 
-		dimensions = 121;
+		dimensions = WIDTH * WIDTH;
 
 
 		for (int j = 0; j < WIDTH; j++) {
