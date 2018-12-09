@@ -9,7 +9,7 @@
 
 using namespace std;
 
-const int WIDTH = 21;
+const int WIDTH = 7;
 
 class maze {
 private:
@@ -29,10 +29,10 @@ private:
 
 	*/
 
-	cell grid[WIDTH][WIDTH];
+	vector<vector<cell>> grid;
 	vector<cell> walls;
 public:
-	int start, finish, dimensions;
+	int start, finish, dimensions, width;
 
 	/* Test constructor
 	maze() {
@@ -66,16 +66,24 @@ public:
 	} // End test constructor */
 
 	maze() {	
-		for (int j = 0; j < WIDTH; j++) {		//Generate each cell as a wall
-			for (int i = 0; i < WIDTH; i++) {
+		width = WIDTH;
+
+		grid.resize(width);
+
+		for (int i = 0; i < width; i++) {
+			grid[i].resize(width);
+		}
+
+		for (int j = 0; j < width; j++) {		//Generate each cell as a wall
+			for (int i = 0; i < width; i++) {
 				grid[i][j].wall = true;
 				grid[i][j].xPos = i;
 				grid[i][j].yPos = j;
 			}
 		}
 
-		for (int j = 1; j < WIDTH; j += 2) {	//Generate a grid of valid spots
-			for (int i = 1; i < WIDTH; i += 2) {
+		for (int j = 1; j < width; j += 2) {	//Generate a grid of valid spots
+			for (int i = 1; i < width; i += 2) {
 				grid[i][j].wall = false;
 			}
 		}
@@ -129,8 +137,8 @@ public:
 	int getSquareValue(int check) { return layout[check]; }
 
 	void printMaze() {
-		for (int j = 0; j < WIDTH; j++) {
-			for (int i = 0; i < WIDTH; i++) {
+		for (int j = 0; j < width; j++) {
+			for (int i = 0; i < width; i++) {
 				if (grid[i][j].wall) {
 					cout << (char)219;
 				}
@@ -154,8 +162,8 @@ public:
 			2. Remove the current wall from the stack	-
 		*/
 
-		int xPos = ((rand() % (WIDTH / 2)) * 2) + 1;
-		int yPos = ((rand() % (WIDTH / 2)) * 2) + 1;
+		int xPos = ((rand() % (width / 2)) * 2) + 1;
+		int yPos = ((rand() % (width / 2)) * 2) + 1;
 
 		grid[xPos][yPos].visited = true;
 
@@ -172,7 +180,7 @@ public:
 			cell current = walls[vecIndex];
 			walls.erase(walls.begin() + vecIndex);
 
-			if (current.xPos != 0 && current.xPos != WIDTH - 1 && current.yPos != 0 && current.yPos != WIDTH - 1) {
+			if (current.xPos != 0 && current.xPos != width - 1 && current.yPos != 0 && current.yPos != width - 1) {
 				if (grid[current.xPos][current.yPos - 1].wall) { //Tests if wall is vertical
 					if (!grid[current.xPos - 1][current.yPos].visited || !grid[current.xPos + 1][current.yPos].visited) {
 						if (!grid[current.xPos - 1][current.yPos].visited) {
@@ -233,23 +241,23 @@ public:
 
 	void  convert() {
 		grid[1][1].start = true;
-		grid[WIDTH - 2][WIDTH - 2].finish = true;
+		grid[width - 2][width - 2].finish = true;
 
-		dimensions = WIDTH * WIDTH;
+		dimensions = width * width;
 
 
-		for (int j = 0; j < WIDTH; j++) {
-			for (int i = 0; i < WIDTH; i++) {
+		for (int j = 0; j < width; j++) {
+			for (int i = 0; i < width; i++) {
 				if (grid[i][j].wall) {
 					layout.push_back(0);
 				}
 				else if (grid[i][j].start) {
 					layout.push_back(2);
-					start = (j * WIDTH) + i;
+					start = (j * width) + i;
 				}
 				else if (grid[i][j].finish) {
 					layout.push_back(3);
-					finish = (j * WIDTH) + i;
+					finish = (j * width) + i;
 				}
 				else {
 					layout.push_back(1);
