@@ -233,13 +233,13 @@ public:
 
 	void  convert() {
 		grid[1][1].start = true;
-		grid[10][10].finish = true;
+		grid[9][9].finish = true;
 
-		dimensions = 100;
+		dimensions = 121;
 
 
-		for (int j = 0; j < WIDTH - 1; j++) {
-			for (int i = 0; i < WIDTH - 1; i++) {
+		for (int j = 0; j < WIDTH; j++) {
+			for (int i = 0; i < WIDTH; i++) {
 				if (grid[i][j].wall) {
 					layout.push_back(0);
 				}

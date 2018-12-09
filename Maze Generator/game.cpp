@@ -29,7 +29,7 @@ int main() {
 
 	for (int i = 0; i < testMaze.dimensions; i++) {
 		cout << testMaze.getSquareValue(i) << " ";
-		if (i % 10 == 9) {
+		if (i % 11 == 10) {
 			cout << endl;
 		}
 	}
