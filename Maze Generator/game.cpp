@@ -26,8 +26,8 @@ bool checkUserInput(vector<int> keys, maze currentMaze);
 
 int main() {
 	srand(time(NULL));
-	maze currentMaze;
-	currentMaze.genMaze();
+	//maze currentMaze;
+	//currentMaze.genMaze();
 	vector<int> keys;
 	bool failMaze = false;
 
@@ -46,7 +46,9 @@ int main() {
 				if (event.type == sf::Event::Closed)
 					window.close();
 			}
-
+			// Generate maze for round
+			maze currentMaze;
+			currentMaze.genMaze();
 
 			// Create vector of squares that matches dimensions of maze
 
@@ -76,6 +78,7 @@ int main() {
 					squaresVector.push_back(Square(windowSize / sideLength - 4, (windowSize / sideLength) * i + 2, (windowSize / sideLength) * j + 2, tempColor));
 				}
 			}
+			cout << "Squares vector created" << endl;
 
 
 			window.clear();
@@ -88,22 +91,17 @@ int main() {
 			for (int i = 0; i < currentMaze.dimensions; i++) {
 				window.draw(squaresVector[i].getTheSquare());
 			}
-
+			
+			cout << "Squares drawn" << endl;
 
 
 			window.display();
-
+			cout << "Window displayed" << endl;
 			getInputs(keys, 20);
 			if (checkUserInput(keys, currentMaze)) {
-				// Clear previous vectors and gen new maze
+				// Clear previous vectors 
 				keys.clear();
-				keys.shrink_to_fit();
 				squaresVector.clear();
-				squaresVector.shrink_to_fit();
-				
-				
-				currentMaze.genMaze();
-				cout << "New maze gen" << endl;
 			}
 			else {
 				failMaze = true;
@@ -158,7 +156,6 @@ bool checkUserInput(vector<int> keys, maze currentMaze) {
 	// Add graphics support
 
 	int start = currentMaze.start;
-	cout << currentMaze.start << endl;
 	int finish = currentMaze.finish;
 	int player = start;
 	bool success = false;
