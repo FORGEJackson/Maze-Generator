@@ -1,5 +1,5 @@
 // Maze Game.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//#include "pch.h"
+#include "pch.h"
 #include <cstdlib>
 #include <iostream>
 #include <vector>
@@ -28,70 +28,95 @@ int main() {
 	srand(time(NULL));
 	maze currentMaze;
 	currentMaze.genMaze();
-	
+	vector<int> keys;
+	bool failMaze = false;
+
 	const int windowSize = 600;
-	sf::RenderWindow window(sf::VideoMode(windowSize, windowSize), "Maze");
+	sf::RenderWindow window(sf::VideoMode(windowSize, windowSize), "Maze Game");
 	
 	
-	vector<Square> squaresVector(currentMaze.dimensions);
+	vector<Square> squaresVector;
 	
 	
-
-	while (window.isOpen()) // Event Loop
-	{
-		sf::Event event;
-		while (window.pollEvent(event))
+		while (window.isOpen() && failMaze == false) // Event Loop
 		{
-			if (event.type == sf::Event::Closed)
-				window.close();
-		}
-		
-
-		// Create vector of squares that matches dimensions of maze
-		
-		
-		int sideLength = sqrt(currentMaze.dimensions);
-		for (int i = 0; i < sideLength; i++) {
-			for (int j = 0; j < sideLength; j++) {
-
-
-
-				sf::Color tempColor;
-				switch (currentMaze.getSquareValue(i+j * sideLength)) {
-				case 0:
-					tempColor = sf::Color::Black;
-					break;
-				case 1:
-					tempColor = sf::Color::White;
-					break;
-				case 2:
-					tempColor = sf::Color::Green;
-					break;
-				case 3:
-					tempColor = sf::Color::Red;
-					break;
-				}
-
-				squaresVector[i + j*sideLength] = Square(windowSize / sideLength - 4, (windowSize / sideLength) * i + 2, (windowSize / sideLength) * j + 2, tempColor);
+			sf::Event event;
+			while (window.pollEvent(event))
+			{
+				if (event.type == sf::Event::Closed)
+					window.close();
 			}
-		} 
-		
-		
-		window.clear();
-		// Draw backgroud square
-		sf::Color grey(75, 75, 75);
-		Square backgroundSquare = Square(windowSize, 0, 0, grey);
-		window.draw(backgroundSquare.getTheSquare());
 
-		// Draw Maze squares
-		for (int i = 0; i < currentMaze.dimensions; i++) {
-			window.draw(squaresVector[i].getTheSquare());
-		}
-		
-		
-		
-		window.display();
-	}
+
+			// Create vector of squares that matches dimensions of maze
+
+
+			int sideLength = sqrt(currentMaze.dimensions);
+			for (int i = 0; i < sideLength; i++) {
+				for (int j = 0; j < sideLength; j++) {
+
+
+
+					sf::Color tempColor;
+					switch (currentMaze.getSquareValue(i + j * sideLength)) {
+					case 0:
+						tempColor = sf::Color::Black;
+						break;
+					case 1:
+						tempColor = sf::Color::White;
+						break;
+					case 2:
+						tempColor = sf::Color::Green;
+						break;
+					case 3:
+						tempColor = sf::Color::Red;
+						break;
+					}
+
+					squaresVector.push_back(Square(windowSize / sideLength - 4, (windowSize / sideLength) * i + 2, (windowSize / sideLength) * j + 2, tempColor));
+				}
+			}
+
+
+			window.clear();
+			// Draw backgroud square
+			sf::Color grey(75, 75, 75);
+			Square backgroundSquare = Square(windowSize, 0, 0, grey);
+			window.draw(backgroundSquare.getTheSquare());
+
+			// Draw Maze squares
+			for (int i = 0; i < currentMaze.dimensions; i++) {
+				window.draw(squaresVector[i].getTheSquare());
+			}
+
+
+
+			window.display();
+
+			getInputs(keys, 20);
+			if (checkUserInput(keys, currentMaze)) {
+				// Clear previous vectors and gen new maze
+				keys.clear();
+				keys.shrink_to_fit();
+				squaresVector.clear();
+				squaresVector.shrink_to_fit();
+				
+				
+				currentMaze.genMaze();
+				cout << "New maze gen" << endl;
+			}
+			else {
+				failMaze = true;
+			}
+
+
+
+		} // End Event loop
+
+
+
+
+	
 	
 }
 
@@ -133,9 +158,11 @@ bool checkUserInput(vector<int> keys, maze currentMaze) {
 	// Add graphics support
 
 	int start = currentMaze.start;
+	cout << currentMaze.start << endl;
 	int finish = currentMaze.finish;
 	int player = start;
 	bool success = false;
+	int mazeWidth = sqrt(currentMaze.dimensions);
 
 	for (int i = 0; i < keys.size(); i++) {
 
@@ -143,16 +170,16 @@ bool checkUserInput(vector<int> keys, maze currentMaze) {
 		int move = keys.at(i);
 		switch (move) {
 		case 1: // Move left
-			if (player % 10 != 0) { player--; }
+			player--; 
 			break;
 		case 2: // Move up
-			if (player - 10 > -1) { player -= 10; }
+			player -= mazeWidth; 
 			break;
-		case 3:
-			if (player % 10 != 9) { player++; }
+		case 3: // Move right
+			player++; 
 			break;
-		case 4:
-			if (player + 10 < 101) { player += 10; }
+		case 4: // Move down
+			player += mazeWidth;
 			break;
 		}
 
