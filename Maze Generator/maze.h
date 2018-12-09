@@ -90,7 +90,7 @@ public:
 
 		// Find correct maze in file
 		char fileValue;
-		int fileMazeLevel, fileDimensions;
+		int fileMazeLevel;
 		while (true) {
 
 			fileStream >> fileValue;
