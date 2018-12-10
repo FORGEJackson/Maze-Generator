@@ -19,9 +19,9 @@ void sleep(unsigned milliseconds) {
 	Sleep(milliseconds);
 }
 
-void getInputs(vector<int> &keys, int checkTime, sf::RenderWindow &window, vector<Square> squaresVector, maze currentMaze, sf::Font theFont);
+void getInputs(vector<int> &keys, int checkTime, sf::RenderWindow &window, vector<Square> squaresVector, maze currentMaze, sf::Font theFont, int mazeLevel);
 
-bool checkUserInput(vector<int> keys, maze currentMaze, sf::RenderWindow &window, vector<Square> squaresVector);
+bool checkUserInput(vector<int> keys, maze currentMaze, sf::RenderWindow &window, vector<Square> squaresVector, int mazeLevel, sf::Font theFont);
 
 const int windowSize = 600;
 
@@ -32,8 +32,8 @@ int main() {
 	vector<int> keys;
 	bool failMaze = false;
 	bool genMaze = true;
-	int currentWidth = 5, currentTime = 5;
-
+	int currentWidth = 7, currTime = 5, mazeLevel = 1;
+	
 	// Load font
 	sf::Font theFont;
 	if (!theFont.loadFromFile("arial.ttf")) {
@@ -47,7 +47,7 @@ int main() {
 	
 	vector<Square> squaresVector;
 	
-	
+		
 		while (window.isOpen() && failMaze == false && genMaze == true) // Event Loop
 		{
 			sf::Event event;
@@ -103,14 +103,16 @@ int main() {
 				window.draw(squaresVector[i].getTheSquare());
 			}
 			
-			
-
+			// Draw current level
+			string strLevel = "Level: " + to_string(mazeLevel);
+			sf::Text levelText(strLevel, theFont, 50);
+			levelText.setPosition(windowSize + 15, 75);
+			window.draw(levelText);
 
 			window.display();
-
-			getInputs(keys, currentTime, window, squaresVector, currentMaze, theFont);
-
-			if (checkUserInput(keys, currentMaze, window, squaresVector)) {
+			
+			getInputs(keys, currTime, window, squaresVector, currentMaze, theFont, mazeLevel);
+			if (checkUserInput(keys, currentMaze, window, squaresVector, mazeLevel, theFont)) {
 				// Clear previous vectors 
 				keys.clear();
 				squaresVector.clear();
@@ -119,13 +121,12 @@ int main() {
 				failMaze = true;
 			}
 			currentWidth += 2;
-			currentTime += 1 + (5 * (5.0 / currentWidth));
-
+			currTime += 1 + (5 * (5.0 / currentWidth));
+			mazeLevel++;
 
 		} // End Event loop
 
 		// Second loop for reading mazes from file
-		int mazeLevel = 1;
 		while (window.isOpen() && failMaze == false && genMaze == false) // Event Loop
 		{
 			sf::Event event;
@@ -181,13 +182,17 @@ int main() {
 				window.draw(squaresVector[i].getTheSquare());
 			}
 
-			
+			// Draw current level
+			string strLevel = "Level: " + to_string(mazeLevel);
+			sf::Text levelText(strLevel, theFont, 50);
+			levelText.setPosition(windowSize + 15, 75);
+			window.draw(levelText);
 
 
 			window.display();
 			
-			getInputs(keys, 20, window, squaresVector, currentMaze, theFont);
-			if (checkUserInput(keys, currentMaze, window, squaresVector)) {
+			getInputs(keys, 20, window, squaresVector, currentMaze, theFont, mazeLevel);
+			if (checkUserInput(keys, currentMaze, window, squaresVector, mazeLevel, theFont)) {
 				// Clear previous vectors 
 				keys.clear();
 				squaresVector.clear();
@@ -207,7 +212,7 @@ int main() {
 }
 
 // Function Definitions
-void getInputs(vector<int> &keys, int checkTime, sf::RenderWindow &window, vector<Square> squaresVector, maze currentMaze, sf::Font theFont) {
+void getInputs(vector<int> &keys, int checkTime, sf::RenderWindow &window, vector<Square> squaresVector, maze currentMaze, sf::Font theFont, int mazeLevel) {
 	time_t startTime, endTime, currentTime;
 	time(&startTime);
 
@@ -248,8 +253,13 @@ void getInputs(vector<int> &keys, int checkTime, sf::RenderWindow &window, vecto
 			window.draw(squaresVector[i].getTheSquare());
 		}
 
-		// Add timer to window
+		// Draw current level
+		string strLevel = "Level: " + to_string(mazeLevel);
+		sf::Text levelText(strLevel, theFont, 50);
+		levelText.setPosition(windowSize + 15, 75);
+		window.draw(levelText);
 
+		// Add timer to window
 		string strCurrentTime = to_string(checkTime - int(time(&currentTime) - startTime));
 		sf::Text timerText(strCurrentTime, theFont, 50);
 		timerText.setPosition(windowSize + 75, 5);
@@ -258,7 +268,7 @@ void getInputs(vector<int> &keys, int checkTime, sf::RenderWindow &window, vecto
 	}
 }
 
-bool checkUserInput(vector<int> keys, maze currentMaze, sf::RenderWindow &window, vector<Square> squaresVector) {
+bool checkUserInput(vector<int> keys, maze currentMaze, sf::RenderWindow &window, vector<Square> squaresVector, int mazeLevel, sf::Font theFont) {
 
 	// Add graphics support
 
@@ -303,6 +313,13 @@ bool checkUserInput(vector<int> keys, maze currentMaze, sf::RenderWindow &window
 		for (int i = 0; i < currentMaze.dimensions; i++) {
 			window.draw(squaresVector[i].getTheSquare());
 		}
+
+		// Draw current level
+		string strLevel = "Level: " + to_string(mazeLevel);
+		sf::Text levelText(strLevel, theFont, 50);
+		levelText.setPosition(windowSize + 15, 75);
+		window.draw(levelText);
+
 		window.display();
 
 		// Validate movement
