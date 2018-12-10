@@ -32,7 +32,7 @@ int main() {
 	vector<int> keys;
 	bool failMaze = false;
 	bool genMaze = true;
-	int currentWidth = 7;
+	int currentWidth = 5, currentTime = 5;
 
 	// Load font
 	sf::Font theFont;
@@ -107,8 +107,9 @@ int main() {
 
 
 			window.display();
-			
-			getInputs(keys, 20, window, squaresVector, currentMaze, theFont);
+
+			getInputs(keys, currentTime, window, squaresVector, currentMaze, theFont);
+
 			if (checkUserInput(keys, currentMaze, window, squaresVector)) {
 				// Clear previous vectors 
 				keys.clear();
@@ -118,6 +119,7 @@ int main() {
 				failMaze = true;
 			}
 			currentWidth += 2;
+			currentTime += 1 + (5 * (5.0 / currentWidth));
 
 
 		} // End Event loop
