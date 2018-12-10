@@ -19,7 +19,7 @@ void sleep(unsigned milliseconds) {
 	Sleep(milliseconds);
 }
 
-void getInputs(vector<int> &keys, int checkTime);
+void getInputs(vector<int> &keys, int checkTime, sf::RenderWindow &window, vector<Square> squaresVector, maze currentMaze, sf::Font theFont);
 
 bool checkUserInput(vector<int> keys, maze currentMaze, sf::RenderWindow &window, vector<Square> squaresVector);
 
@@ -34,8 +34,15 @@ int main() {
 	bool genMaze = true;
 	int currentWidth = 7;
 
-	
-	sf::RenderWindow window(sf::VideoMode(windowSize, windowSize), "Maze Game");
+	// Load font
+	sf::Font theFont;
+	if (!theFont.loadFromFile("arial.ttf")) {
+		cout << "Error loading font. Exiting Program ... ";
+		exit(-1);
+	}
+
+
+	sf::RenderWindow window(sf::VideoMode(windowSize + 200, windowSize), "Maze Game");
 	
 	
 	vector<Square> squaresVector;
@@ -79,7 +86,7 @@ int main() {
 						break;
 					}
 
-					squaresVector.push_back(Square(windowSize / sideLength - 4, (windowSize / sideLength) * j + 2, (windowSize / sideLength) * i + 2, tempColor));
+					squaresVector.push_back(Square(windowSize / sideLength - 4, (windowSize / sideLength) * j + 4, (windowSize / sideLength) * i + 4, tempColor));
 				}
 			}
 			
@@ -101,7 +108,7 @@ int main() {
 
 			window.display();
 			
-			getInputs(keys, 20);
+			getInputs(keys, 20, window, squaresVector, currentMaze, theFont);
 			if (checkUserInput(keys, currentMaze, window, squaresVector)) {
 				// Clear previous vectors 
 				keys.clear();
@@ -177,7 +184,7 @@ int main() {
 
 			window.display();
 			
-			getInputs(keys, 20);
+			getInputs(keys, 20, window, squaresVector, currentMaze, theFont);
 			if (checkUserInput(keys, currentMaze, window, squaresVector)) {
 				// Clear previous vectors 
 				keys.clear();
@@ -198,8 +205,8 @@ int main() {
 }
 
 // Function Definitions
-void getInputs(vector<int> &keys, int checkTime) {
-	time_t startTime, endTime;
+void getInputs(vector<int> &keys, int checkTime, sf::RenderWindow &window, vector<Square> squaresVector, maze currentMaze, sf::Font theFont) {
+	time_t startTime, endTime, currentTime;
 	time(&startTime);
 
 	int L = 0, R = 0, U = 0, D = 0;
@@ -227,6 +234,25 @@ void getInputs(vector<int> &keys, int checkTime) {
 
 		// Deincrement all counters
 		L--; R--; U--; D--;
+
+		// Display current window
+		window.clear();
+		// Draw backgroud square
+		sf::Color grey(75, 75, 75);
+		Square backgroundSquare = Square(windowSize, 0, 0, grey);
+		window.draw(backgroundSquare.getTheSquare());
+		// Draw squares to screen
+		for (int i = 0; i < currentMaze.dimensions; i++) {
+			window.draw(squaresVector[i].getTheSquare());
+		}
+
+		// Add timer to window
+
+		string strCurrentTime = to_string(checkTime - int(time(&currentTime) - startTime));
+		sf::Text timerText(strCurrentTime, theFont, 50);
+		timerText.setPosition(windowSize + 75, 5);
+		window.draw(timerText);
+		window.display();
 	}
 }
 
